@@ -1,5 +1,5 @@
 from main import getData
-import time
+from datetime import datetime
 from createDb import Session, engine,Wetterlage,Wettertyp,Ort,Zeit
 
 data = getData().json()
@@ -15,12 +15,14 @@ if data["cod"] != "404":
     name = data['name']
     ort_id = data['id']
     ort=Ort(name,ort_id)
-    my_Session.add(ort)
+    if not my_Session.query(Ort).filter(Ort.ort_id==ort_id):
+        my_Session.add(ort)
+    
 
     timecode = data['dt']
-    current_time = time.ctime(timecode)
+    current_time = datetime.fromtimestamp(timecode)
     zeit=Zeit(current_time)
-    my_Session.add(str(zeit))
+    my_Session.add(zeit)
 
     current_weather = data['weather'][0]['main']
     weather_id = data['weather'][0]['id']
@@ -39,8 +41,6 @@ if data["cod"] != "404":
 
 
     
-
-
 
 
 

@@ -2,19 +2,25 @@ from sqlalchemy import create_engine, ForeignKey
 from sqlalchemy.orm import declarative_base, sessionmaker, relationship
 from sqlalchemy import Column, ForeignKey
 from sqlalchemy.sql.sqltypes import String, Integer, Float
+from sqlalchemy.sql.sqltypes import DateTime
+
+
+
 
 
 engine = create_engine('sqlite:///database.db')
 base = declarative_base()
-conn = engine.connect()
-Session = sessionmaker()
+
+
+ 
+
 
 
 class Wetterlage(base):
     __tablename__ = 'wetterlagen'
 
     ort_id = Column(Integer, ForeignKey('orte.ort_id'), primary_key=True,nullable=False)
-    zeit = Column(Integer, ForeignKey('zeiten.zeit'), primary_key=True,nullable=False)
+    zeit = Column(String, ForeignKey('zeiten.zeit'), primary_key=True,nullable=False)
     temperatur = Column(Float, nullable=False)
     luftdruck = Column(Integer, nullable=False)
     bewoelkungsgrad = Column(Integer, nullable=False)
@@ -55,7 +61,7 @@ class Wettertyp(base):
 class Ort(base):
     __tablename__ = 'orte'
 
-    ort_id = Column(Integer, primary_key=True, autoincrement=False)
+    ort_id = Column(Integer, primary_key=True, autoincrement=True)
     name = Column(String, nullable=False)
     wetterlagen = relationship("Wetterlage", back_populates="ort")
     def __init__(self, name,ort_id) -> None:
@@ -67,12 +73,13 @@ class Ort(base):
 class Zeit(base):
     __tablename__ = 'zeiten'
 
-    zeit = Column(String, primary_key=True, autoincrement=False)
+    zeit = Column(DateTime, primary_key=True, autoincrement=False)
     wetterlagen = relationship("Wetterlage", back_populates="zeit_obj")
     def __init__(self,zeit)->None:
         self.zeit=zeit
 
 
 
-base.metadata.create_all(conn)
-
+base.metadata.create_all(bind=engine)
+conn = engine.connect()
+Session = sessionmaker(bind=engine)
