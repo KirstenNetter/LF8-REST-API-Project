@@ -4,6 +4,8 @@ from createDb import Session, engine,Wetterlage,Wettertyp,Ort,Zeit
 
 data = getData().json()
 
+
+
 my_Session = Session(bind=engine)
 
 
@@ -18,7 +20,7 @@ if data["cod"] != "404":
     timecode = data['dt']
     current_time = time.ctime(timecode)
     zeit=Zeit(current_time)
-    my_Session.add(zeit)
+    my_Session.add(str(zeit))
 
     current_weather = data['weather'][0]['main']
     weather_id = data['weather'][0]['id']
@@ -29,10 +31,13 @@ if data["cod"] != "404":
     current_temperature = data['main']['temp']
     current_pressure = data['main']['pressure']
     current_cloudiness = data['clouds']['all']
-    wetterlage=Wetterlage(current_temperature,current_pressure,current_cloudiness)
+    wetterlage=Wetterlage(current_temperature,current_pressure,current_cloudiness,weather_id,ort,zeit,wettertyp)
     my_Session.add(wetterlage)
 
     my_Session.commit()
+
+
+
     
 
 

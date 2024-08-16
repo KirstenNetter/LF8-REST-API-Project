@@ -13,17 +13,29 @@ Session = sessionmaker()
 class Wetterlage(base):
     __tablename__ = 'wetterlagen'
 
-    ort_id = Column(Integer, ForeignKey('orte.ort_id'), primary_key=True)
-    zeit = Column(Integer, ForeignKey('zeiten.zeit'), primary_key=True)
+    ort_id = Column(Integer, ForeignKey('orte.ort_id'), primary_key=True,nullable=False)
+    zeit = Column(Integer, ForeignKey('zeiten.zeit'), primary_key=True,nullable=False)
     temperatur = Column(Float, nullable=False)
     luftdruck = Column(Integer, nullable=False)
-    Bewoelkungsgrad = Column(Integer, nullable=False)
+    bewoelkungsgrad = Column(Integer, nullable=False)
     wettertyp_id = Column(Integer, ForeignKey('wettertypen.wettertyp_id'), nullable=False)
+  
 
-    def __init__(self, temperatur, luftdruck, bewoelkungsgrad) -> None:
+    ort = relationship("Ort", back_populates="wetterlagen")
+    zeit_obj = relationship("Zeit", back_populates="wetterlagen")
+    wettertyp = relationship("Wettertyp", back_populates="wetterlagen")
+
+
+    def __init__(self, temperatur, luftdruck, bewoelkungsgrad,weathertyp_id,ort,zeit_obj,wettertyp) -> None:
         self.temperatur = temperatur
         self.luftdruck = luftdruck
         self.bewoelkungsgrad = bewoelkungsgrad
+        self.wettertyp_id=weathertyp_id
+        self.ort=ort
+        self.zeit_obj=zeit_obj
+        self.wettertyp=wettertyp
+
+
 
 
 class Wettertyp(base):
@@ -31,10 +43,13 @@ class Wettertyp(base):
 
     wettertyp_id = Column(Integer, primary_key=True, autoincrement=False)
     typ = Column(String, nullable=False)
-
+    wetterlagen = relationship("Wetterlage", back_populates="wettertyp")
     def __init__(self, typ,wettertyp_id) -> None:
         self.typ = typ
         self.wettertyp_id=wettertyp_id
+
+
+
 
 
 class Ort(base):
@@ -42,15 +57,20 @@ class Ort(base):
 
     ort_id = Column(Integer, primary_key=True, autoincrement=False)
     name = Column(String, nullable=False)
-
+    wetterlagen = relationship("Wetterlage", back_populates="ort")
     def __init__(self, name,ort_id) -> None:
         self.name = name
         self.ort_id=ort_id
+
+
 
 class Zeit(base):
     __tablename__ = 'zeiten'
 
     zeit = Column(String, primary_key=True, autoincrement=False)
+    wetterlagen = relationship("Wetterlage", back_populates="zeit_obj")
+    def __init__(self,zeit)->None:
+        self.zeit=zeit
 
 
 
