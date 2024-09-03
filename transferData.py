@@ -6,11 +6,7 @@ from sqlalchemy.orm import Session
 
 
 data = getData().json()
-
-
-
 my_Session = Session(bind=engine)
-
 
 
 if data["cod"] != "404":
@@ -68,43 +64,3 @@ if data["cod"] != "404":
     )
     my_Session.add(wetterlage)
     my_Session.commit()
-
-    # timecode = data['dt']
-    # current_time = datetime.fromtimestamp(timecode)
-    # zeit=Zeit(current_time)
-    # exists_query = select(exists().where(Zeit.zeit == zeit.zeit))
-    # result = my_Session.execute(exists_query).scalar()
-    # if not result:
-    #     my_Session.add(zeit)
-
-    # current_weather = data['weather'][0]['main']
-    # weather_id = data['weather'][0]['id']
-    # wettertyp=Wettertyp(current_weather,weather_id)
-    # exists_query = select(exists().where(Wettertyp.wettertyp_id == weather_id))
-    # result = my_Session.execute(exists_query).scalar()
-    # if not result:
-    #     my_Session.add(wettertyp) 
-
-
-    # current_temperature = data['main']['temp']
-    # current_pressure = data['main']['pressure']
-    # current_cloudiness = data['clouds']['all']
-    # wetterlage=Wetterlage(current_temperature,current_pressure,current_cloudiness,weather_id,ort,zeit,wettertyp)
-    # my_Session.add(wetterlage)
-
-   
-
-    # my_Session.commit()
-
-
-
-
-
-
-
-    
-
-
-
-
-

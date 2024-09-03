@@ -5,15 +5,8 @@ from sqlalchemy.sql.sqltypes import String, Integer, Float
 from sqlalchemy.sql.sqltypes import DateTime
 
 
-
-
-
 engine = create_engine('sqlite:///database.db')
 base = declarative_base()
-
-
- 
-
 
 
 class Wetterlage(base):
@@ -25,12 +18,10 @@ class Wetterlage(base):
     luftdruck = Column(Integer, nullable=False)
     bewoelkungsgrad = Column(Integer, nullable=False)
     wettertyp_id = Column(Integer, ForeignKey('wettertypen.wettertyp_id'), nullable=False)
-  
 
     ort = relationship("Ort", back_populates="wetterlagen")
     zeit_obj = relationship("Zeit", back_populates="wetterlagen")
     wettertyp = relationship("Wettertyp", back_populates="wetterlagen")
-
 
     def __init__(self, temperatur, luftdruck, bewoelkungsgrad,weathertyp_id,ort,zeit_obj,wettertyp) -> None:
         self.temperatur = temperatur
@@ -42,20 +33,16 @@ class Wetterlage(base):
         self.wettertyp=wettertyp
 
 
-
-
 class Wettertyp(base):
     __tablename__ = 'wettertypen'
 
     wettertyp_id = Column(Integer, primary_key=True, autoincrement=False)
     typ = Column(String, nullable=False)
     wetterlagen = relationship("Wetterlage", back_populates="wettertyp")
+
     def __init__(self, typ,wettertyp_id) -> None:
         self.typ = typ
         self.wettertyp_id=wettertyp_id
-
-
-
 
 
 class Ort(base):
@@ -64,10 +51,10 @@ class Ort(base):
     ort_id = Column(Integer, primary_key=True, autoincrement=True)
     name = Column(String, nullable=False)
     wetterlagen = relationship("Wetterlage", back_populates="ort")
+
     def __init__(self, name,ort_id) -> None:
         self.name = name
         self.ort_id=ort_id
-
 
 
 class Zeit(base):
@@ -75,9 +62,9 @@ class Zeit(base):
 
     zeit = Column(DateTime, primary_key=True, autoincrement=False)
     wetterlagen = relationship("Wetterlage", back_populates="zeit_obj")
+
     def __init__(self,zeit)->None:
         self.zeit=zeit
-
 
 
 base.metadata.create_all(bind=engine)
