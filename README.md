@@ -40,7 +40,7 @@ Das Programm besteht aus drei Skripten, die nacheinander ausgeführt werden müs
     ```
 
     Dieses Skript führt folgende Aktionen aus:
-    - Ruft aktuelle Wetterdaten für den Ort get_ort ab.
+    - Ruft aktuelle Wetterdaten für den in `main.py` definierten Ort ab.
     - Überprüft, ob die Daten (Ort, Zeit, Wettertyp) bereits in der Datenbank vorhanden sind.
     - Fügt neue Daten zur Datenbank hinzu, falls diese noch nicht vorhanden sind.
 
@@ -52,6 +52,4 @@ Das Programm besteht aus drei Skripten, die nacheinander ausgeführt werden müs
 - **`createDb.py`**: Dieses Skript erstellt die Datenbank und definiert die Tabellenstrukturen mithilfe von SQLAlchemy.
 - **`transferData.py`**: Dieses Skript verbindet die beiden vorherigen Skripte und überträgt die abgerufenen Wetterdaten in die Datenbank.
 
-## Fehlerbehebung
 
-- **Ungültiger API-Schlüssel**: Stelle sicher, dass der API-Schlüssel korrekt ist und aktiv. Überprüfe deine Eingabe und stelle sicher, dass der Schlüssel nicht abgelaufen ist.
