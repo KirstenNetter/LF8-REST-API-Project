@@ -5,7 +5,7 @@ from sqlalchemy import select, exists
 from sqlalchemy.orm import Session
 
 
-data = getData().json()
+data = getData('Wien').json()
 my_Session = Session(bind=engine)
 
 
@@ -63,4 +63,12 @@ if data["cod"] != "404":
         wettertyp=wettertyp
     )
     my_Session.add(wetterlage)
-    my_Session.commit()
+    
+
+    try:
+     my_Session.commit()
+     print("Eintrag in der Datenbank gespeichert")
+    
+    except Exception:
+       my_Session.rollback()
+       print("Eintrag Fehlerhaft")
