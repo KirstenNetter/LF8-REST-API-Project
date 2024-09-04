@@ -5,7 +5,7 @@ from sqlalchemy import select, exists
 from sqlalchemy.orm import Session
 
 
-data = getData('Wien').json()
+data = getData("Heraklion").json()
 my_Session = Session(bind=engine)
 
 
@@ -37,7 +37,7 @@ if data["cod"] != "404":
         zeit = my_Session.query(Zeit).filter_by(zeit=current_time).one()
 
     
-    current_weather = data['weather'][0]['main']
+    current_weather = data['weather'][0]['description']
     weather_id = data['weather'][0]['id']
     exists_query = select(exists().where(Wettertyp.wettertyp_id == weather_id))
     result = my_Session.execute(exists_query).scalar()
@@ -67,8 +67,10 @@ if data["cod"] != "404":
 
     try:
      my_Session.commit()
-     print("Eintrag in der Datenbank gespeichert")
+     print("Eintrag in der Datenbank gespeichert!")
     
     except Exception:
        my_Session.rollback()
-       print("Eintrag Fehlerhaft")
+       print("Fehlerhafte Daten erhalten: Datenbank wurde auf alten Stand zurückgesetzt")
+else:
+   print("Keine Daten erhalten")            
